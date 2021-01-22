@@ -2,10 +2,7 @@ package com.zs.demo.bean;
 
 import org.springframework.boot.context.properties.ConfigurationProperties;
 
-/**
- * @author 18070967
- * @create 2021/1/9
- */
+
 //@Component
 @ConfigurationProperties(prefix = "mycar")
 public class Car {

@@ -1,9 +1,6 @@
 package com.zs.demo.bean;
 
-/**
- * @author 18070967
- * @create 2021/1/9
- */
+
 public class Pig {
     private String name;
 
