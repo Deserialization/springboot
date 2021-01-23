@@ -16,7 +16,7 @@ public class DeptService {
     @Autowired
     DepartmentDao departmentDao;
 
-    //@Qualifier("deptCacheManager")
+    @Qualifier("rManager")
     @Autowired
     RedisCacheManager deptCacheManager;
 
@@ -31,6 +31,7 @@ public class DeptService {
 
     // 使用缓存管理器得到缓存，进行api调用
     @Cacheable(cacheNames = "dept",cacheManager = "deptCacheManager")
+    //@Cacheable(cacheNames = "dept",key = "#root.methodName+'['+#id+']'")
     public Department getDeptById(Integer id){
         Department department = departmentDao.deptById(id);
 

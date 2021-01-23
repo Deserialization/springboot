@@ -3,7 +3,9 @@ package com.zs.demo.bean;
 import java.io.Serializable;
 
 
-
+/**
+ * @author 么么么哒
+ */
 public class Employee implements Serializable {
 
 	private static final long serialVersionUID = 7427456985825117634L;

@@ -2,13 +2,15 @@ package com.zs.demo.bean;
 
 import org.springframework.boot.context.properties.ConfigurationProperties;
 
-
+/**
+ * @author 么么么哒
+ * @create 2021/1/9
+ */
 //@Component
 @ConfigurationProperties(prefix = "mycar")
 public class Car {
     private String brand;
     private Integer price;
-
     public String getBrand() {
         return brand;
     }

@@ -4,7 +4,10 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-
+/**
+ * @author 么么么哒
+ * @create 2021/1/9
+ */
 @RestController
 public class HelloController {
 

@@ -21,7 +21,7 @@ public class MyRedisConfig {
     //CacheManagerCustomizers可以来定制缓存的一些规则
     @Primary  //将某个缓存管理器作为默认的
     @Bean
-    public RedisCacheManager employeeCacheManager(RedisConnectionFactory redisConnectionFactory) {
+    public RedisCacheManager rManager(RedisConnectionFactory redisConnectionFactory) {
         //初始化一个RedisCacheWriter
         //设置CacheManager的值序列化方式为json序列化
         RedisCacheWriter redisCacheWriter = RedisCacheWriter.nonLockingRedisCacheWriter(redisConnectionFactory);
@@ -32,22 +32,6 @@ public class MyRedisConfig {
                 .serializeValuesWith(pair);
         //设置默认超过期时间是50秒
         defaultCacheConfig.entryTtl(Duration.ofSeconds(50));
-        //初始化RedisCacheManager
-        return new RedisCacheManager(redisCacheWriter, defaultCacheConfig);
-    }
-
-
-    @Bean
-    public RedisCacheManager deptCacheManager(RedisConnectionFactory redisConnectionFactory) {
-        //初始化一个RedisCacheWriter
-        //设置CacheManager的值序列化方式为json序列化
-        RedisCacheWriter redisCacheWriter = RedisCacheWriter.nonLockingRedisCacheWriter(redisConnectionFactory);
-        RedisSerializer<Object> jsonSerializer = new GenericJackson2JsonRedisSerializer();
-        RedisSerializationContext.SerializationPair<Object> pair = RedisSerializationContext.SerializationPair
-                .fromSerializer(jsonSerializer);
-        RedisCacheConfiguration defaultCacheConfig = RedisCacheConfiguration.defaultCacheConfig().serializeValuesWith(pair);
-        //设置默认超过期时间是40秒
-        defaultCacheConfig.entryTtl(Duration.ofSeconds(40));
         //初始化RedisCacheManager
         return new RedisCacheManager(redisCacheWriter, defaultCacheConfig);
     }

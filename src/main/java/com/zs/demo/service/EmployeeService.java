@@ -3,12 +3,10 @@ package com.zs.demo.service;
 import com.zs.demo.bean.Employee;
 import com.zs.demo.dao.EmployeeDao;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.cache.annotation.CacheConfig;
-import org.springframework.cache.annotation.CachePut;
-import org.springframework.cache.annotation.Cacheable;
+import org.springframework.cache.annotation.*;
 import org.springframework.stereotype.Service;
 
-//@CacheConfig(cacheNames = "emp", cacheManager = "employeeCacheManager") //抽取缓存的公共配置
+@CacheConfig(cacheNames = "emp", cacheManager = "rManager") //抽取缓存的公共配置
 @Service
 public class EmployeeService {
 
@@ -129,23 +127,23 @@ public class EmployeeService {
      * beforeInvocation = true：
      * 代表清除缓存操作是在方法运行之前执行，无论方法是否出现异常，缓存都清除
      */
-    //@CacheEvict(value="emp",beforeInvocation = true/*key = "#id",*/)
+    @CacheEvict(value="emp",beforeInvocation = false/*key = "#id",*/)
     public void deleteEmp(Integer id) {
         System.out.println("deleteEmp:" + id);
-        //employeeMapper.deleteEmpById(id);
-        int i = 10 / 0;
+        employeeMapper.deleteEmpById(id);
+        //int i = 10 / 0;
     }
 
-    // @Caching 定义复杂的缓存规则
-    /*@Caching(
+     //@Caching 定义复杂的缓存规则
+    @Caching(
          cacheable = {
-             @Cacheable(*//*value="emp",*//*key = "#lastName")
+             @Cacheable(value="emp",key = "#lastName")
          },
          put = {
-             @CachePut(*//*value="emp",*//*key = "#result.id"),
-             @CachePut(*//*value="emp",*//*key = "#result.email")
+             @CachePut(value="emp",key = "#result.id"),
+             @CachePut(value="emp",key = "#result.email")
          }
-    )*/
+    )
     public Employee getEmpByLastName(String lastName) {
         return employeeMapper.getEmpByLastName(lastName);
     }

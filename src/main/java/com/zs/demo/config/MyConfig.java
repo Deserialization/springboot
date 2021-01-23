@@ -7,7 +7,10 @@ import org.springframework.boot.context.properties.EnableConfigurationProperties
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ImportResource;
 
-
+/**
+ * @author 么么么哒
+ * @create 2021/1/9
+ */
 //@Configuration(proxyBeanMethods = false)
 //@ConditionalOnBean(name = "pig1")
 @ImportResource("classpath:beans.xml")
