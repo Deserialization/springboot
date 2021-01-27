@@ -7,6 +7,7 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.cache.annotation.EnableCaching;
 import org.springframework.context.ConfigurableApplicationContext;
+import org.springframework.context.annotation.ComponentScan;
 
 /**
  * 自动配置
@@ -39,6 +40,7 @@ import org.springframework.context.ConfigurableApplicationContext;
 @EnableRabbit
 @SpringBootApplication
 @EnableCaching
+@ComponentScan(basePackages = "com.zs.demo.repository.BookRepository")
 public class DemoApplication {
 
     public static void main(String[] args) {
