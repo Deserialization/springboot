@@ -16,6 +16,8 @@ import org.springframework.test.context.junit4.SpringRunner;
 
 import java.io.IOException;
 
+import java.io.IOException;
+
 @RunWith(SpringRunner.class)
 @SpringBootTest
 public class Springboot03ElasticApplicationTests {
@@ -28,15 +30,15 @@ public class Springboot03ElasticApplicationTests {
 
 	@Test
 	public void test02(){
-//		Book book = new Book();
-//		book.setId(1);
-//		book.setBookName("西游记");
-//		book.setAuthor("吴承恩");
-//		bookRepository.index(book);
+		Desk book = new Desk();
+		book.setId(1);
+		book.setBookName("西游记");
+		book.setAuthor("吴承恩");
+		bookRepository.index(book);
 
 
-		for (Desk desk : bookRepository.findByBookNameLike("游")) {
-			System.out.println(desk);
+		for (Desk bk : bookRepository.findByBookNameLike("游")) {
+			System.out.println(bk);
 		}
 
 	}
@@ -44,6 +46,8 @@ public class Springboot03ElasticApplicationTests {
 
 
 
+	// 访问地址 http://localhost:9200/atguigu/news/1
+	// No bean named 'elasticsearchTemplate' available报这个的话就在配置文件中加elasticsearch的配置
 	@Test
 	public void contextLoads() {
 		//1、给Es中索引（保存）一个文档；
