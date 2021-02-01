@@ -148,11 +148,9 @@
 5.zk实现分布式锁：
 
 6.同步异步 阻塞 非阻塞区别
-
     BIO:同步阻塞;一个线程对应一个socket
     NIO:同步非阻塞：有个selector（选择器：多路复用，监听多个通道）：一个线程有多个socket；
     AIO;异步非阻塞：异步通道：
-
     B阻塞：当前线程暂时没有数据可读的时候、accept或者是read的时候。
     N阻塞：thread-->channel-->buffer-->socket. thread不会阻塞
       -->channel-->buffer-->socket.
@@ -162,7 +160,6 @@
     每个channel对应一个buffer.
     selector:能够检测多个注册的通道是否有事件发生。单线程，多路复用，调用select方法，select方法可以获取到注册上去的selectionkey，遍历selectionkey获取到channel。
     selector.select().//阻塞；
-    
     当客户端连接时，会通过ServerSocketChannel 得到 SocketChannel
     将socketChannel注册到Selector上, register(Selector sel, int ops), 一个selector上可以注册多个SocketChannel
     注册后返回一个 SelectionKey, 会和该Selector 关联(集合)
@@ -173,11 +170,45 @@
     代码撑腰。。。
 
 
-7.单 Reactor 单线程/单 Reactor 多线程/主从 Reactor 多线程
- 
+7.单Reactor 单线程/单 Reactor 多线程/主从 Reactor 多线程
     Netty 线程模式(Netty 主要基于主从 Reactor 多线程模型做了一定的改进，其中主从 Reactor 多线程模型有多个 Reactor) 
     I/O 复用结合线程池，就是 Reactor 模式基本设计思想，
     Reactor 模式，通过一个或多个输入同时传递给服务处理器的模式(基于事件驱动)
     服务器端程序处理传入的多个请求,并将它们同步分派到相应的处理线程， 因此Reactor模式也叫 Dispatcher模式
     Reactor 模式使用IO复用监听事件, 收到事件后，分发给某个线程(进程), 这点就是网络服务器高并发处理关键
+    
+   传统IO流：    
+        采用阻塞IO模式获取输入的数据
+        每个连接都需要独立的线程完成数据的输入，业务处理,数据返回
+            问题分析
+                当并发数很大，就会创建大量的线程，占用很大系统资源
+                连接创建后，如果当前线程暂时没有数据可读，该线程会阻塞在read 操作，造成线程资源浪费
+            解决（Reactor:I/O 复用结合线程池）：
+                基于I/O复用模型：多个连接共用一个阻塞对象，应用程序只需要在一个阻塞对象等待，无需阻塞等待所有连接。当某个连接有新的数据可以处理时，操作系统通知应用程序，线程从阻塞状态返回，开始进行业务处理Reactor 对应的叫法: 1. 反应器模式 2. 分发者模式(Dispatcher) 3. 通知者模式(notifier)
+                （Dispatcher转发）传统的Io没有dispatcher没有转发
+                基于线程池复用线程资源：不必再为每个连接创建线程，将连接完成后的业务处理任务分配给线程进行处理，一个线程可以处理多个连接的业务。
+                （线程重复利用）
+   单Reactor 单线程:
+         方案说明：         
+             Select 是前面 I/O 复用模型介绍的标准网络编程 API，可以实现应用程序通过一个阻塞对象监听多路连接请求
+             Reactor 对象通过 Select 监控客户端请求事件，收到事件后通过 Dispatch 进行分发
+             如果是建立连接请求事件，则由 Acceptor 通过 Accept 处理连接请求，然后创建一个 Handler 对象处理连接完成后的后续业务处理
+             如果不是建立连接事件，则 Reactor 会分发调用连接对应的 Handler 来响应
+             Handler 会完成 Read→业务处理→Send 的完整业务流程
+         方案优缺点分析：                  
+             优点：模型简单，没有多线程、进程通信、竞争的问题，全部都在一个线程中完成
+             缺点：性能问题，只有一个线程，无法完全发挥多核 CPU 的性能。Handler 在处理某个连接上的业务时，整个进程无法处理其他连接事件，很容易导致性能瓶颈
+             缺点：可靠性问题，线程意外终止，或者进入死循环，会导致整个系统通信模块不可用，不能接收和处理外部消息，造成节点故障        
+             使用场景：客户端的数量有限，业务处理非常快速，比如 Redis在业务处理的时间复杂度 O(1) 的情况                
+   单Reactor多线程:
+         方案说明
+             Reactor 对象通过select 监控客户端请求事件, 收到事件后，通过dispatch进行分发
+             如果建立连接请求, 则右Acceptor 通过accept 处理连接请求, 然后创建一个Handler对象处理完成连接后的各种事件
+             如果不是连接请求，则由reactor分发调用连接对应的handler 来处理
+             handler 只负责响应事件，不做具体的业务处理, 通过read 读取数据后，会分发给后面的worker线程池的某个线程处理业务
+             worker 线程池会分配独立线程完成真正的业务，并将结果返回给handler
+             handler收到响应后，通过send 将结果返回给client
+   主从 Reactor 多线程：
+    
+
 
