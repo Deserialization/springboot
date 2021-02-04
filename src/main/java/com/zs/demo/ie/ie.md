@@ -302,7 +302,15 @@
         通常一个服务端口即一个 ServerSocketChannel对应一个Selector 和一个EventLoop线程。BossEventLoop 负责接收客户端的连接并将 SocketChannel 交给 WorkerEventLoopGroup 来进行 IO 处理，如下图所示
    10.Unpooled 类
         Netty 提供一个专门用来操作缓冲区(即Netty的数据容器)的工具类
-         
+   
+   实例要求:  
+   Http协议是无状态的, 浏览器和服务器间的请求响应一次，下一次会重新创建连接.
+   
+   要求：实现基于webSocket的长连接的全双工的交互
+   改变Http协议多次请求的约束，实现长连接了， 服务器可以发送消息给浏览器
+   客户端浏览器和服务器端会相互感知，比如服务器关闭了，浏览器会感知，同样浏览器关闭了，服务器会感知
+   
+      
         
         
         
