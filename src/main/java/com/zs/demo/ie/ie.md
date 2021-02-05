@@ -315,7 +315,21 @@
    
    codec(编解码器) 的组成部分有两个：decoder(解码器)和 encoder(编码器)。encoder 负责把业务数据转换成字节码数据，decoder 负责把字节码数据转换成业务数据
    
-   
+   Netty 自身提供了一些 codec(编解码器)   
+       Netty 提供的编码器
+       StringEncoder，对字符串数据进行编码
+       ObjectEncoder，对 Java 对象进行编码
+        ...
+       Netty 提供的解码器
+       StringDecoder, 对字符串数据进行解码
+       ObjectDecoder，对 Java 对象进行解码
+       ...
+       Netty 本身自带的 ObjectDecoder 和 ObjectEncoder 可以用来实现 POJO 对象或各种业务对象的编码和解码，底层使用的仍是 Java 序列化技术 , 而Java 序列化技术本身效率就不高，存在如下问题
+       无法跨语言
+       序列化后的体积太大，是二进制编码的 5 倍多。
+       序列化性能太低
+       => 引出 新的解决方案 [Google 的 Protobuf]
+
    
 
 
