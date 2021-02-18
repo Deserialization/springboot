@@ -1,18 +1,48 @@
 package com.zs.demo.ag.hw;
 
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.util.Map;
 import java.util.Scanner;
+import java.util.TreeMap;
 
 public class lastWordLength {
 
 
     public static void main(String[] args) {
 
-
-        // /addAndSub();
+        //keyAndValue();
+        //addAndSub();
         //divNumber();
         //transNum();
         //splitString();
         //lastWordLength();
+    }
+
+    /**
+     * 数据表记录包含表索引和数值（int范围的正整数），请对表索引相同的记录进行合并，
+     * 即将相同索引的数值进行求和运算，输出按照key值升序进行输出。
+     */
+    private static void keyAndValue() {
+        try {
+            BufferedReader in = new BufferedReader(new InputStreamReader(System.in));
+            int i = Integer.parseInt(in.readLine());
+            Map<Integer, Integer> tm = new TreeMap<Integer, Integer>();
+
+            for (int j = 0; j < i; j++) {
+                String s = in.readLine();
+                String[] str = s.split(" ");
+                int key = Integer.parseInt(str[0]);
+                int value = tm.containsKey(key) ? Integer.parseInt(str[1]) + tm.get(key) : Integer.parseInt(str[1]);
+                tm.put(key, value);
+            }
+            for (Integer k : tm.keySet()) {
+                System.out.println(k + " " + tm.get(k));
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     private static void addAndSub() {
@@ -22,8 +52,8 @@ public class lastWordLength {
          */
         Scanner scanner = new Scanner(System.in);
         double number = scanner.nextDouble();
-        int i = (int)(number);
-        System.out.println((number-i)>=0.5?i+1:i);
+        int i = (int) (number);
+        System.out.println((number - i) >= 0.5 ? i + 1 : i);
     }
 
     /**
@@ -37,9 +67,9 @@ public class lastWordLength {
         long num = scanner.nextLong();
 
         long t = num;
-        for (int i=2;i<=t; i++) {
+        for (int i = 2; i <= t; i++) {
             while (num % i == 0) {
-                num = num/i;
+                num = num / i;
                 sbBuilder.append(i);
                 sbBuilder.append(" ");
             }
