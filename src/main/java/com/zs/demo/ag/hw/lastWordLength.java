@@ -12,12 +12,60 @@ public class lastWordLength {
 
     public static void main(String[] args) {
 
+        //countWords();
+
+        ///reverseSort();
         //keyAndValue();
         //addAndSub();
         //divNumber();
         //transNum();
         //splitString();
         //lastWordLength();
+    }
+
+    /**
+     * 编写一个函数，计算字符串中含有的不同字符的个数。字符在ACSII码范围内(0~127)，
+     * 换行表示结束符，不算在字符里。不在范围内的不作统计。多个相同的字符只计算一次
+       例如，对于字符串abaca而言，有a、b、c三种不同的字符，因此输出3。
+     */
+    private static void countWords() {
+        Scanner scanner = new Scanner(System.in);
+        String string = scanner.next();
+
+        int count = 0;
+        String[] arr = new String[128];
+        for (int i = 0; i < string.length(); i++) {
+            int ch = string.charAt(i);
+            if (string.charAt(i) > 0 && string.charAt(i) < 127 && arr[ch] != "1") {
+                //若是ASCII码范围内的字符,arr中1表示已计数过
+                count++;
+                arr[ch] = "1";
+            }
+        }
+        System.out.println(count);
+    }
+
+    private static void reverseSort() {
+        /**
+         * 输入一个int型整数，按照从右向左的阅读顺序，返回一个不含重复数字的新的整数。
+         保证输入的整数最后一位不是0。
+         */
+        try {
+            BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
+            String str = reader.readLine();
+            StringBuilder builder = new StringBuilder();
+            int[] count = new int[10];
+            for (int i = str.length() - 1; i >= 0; i--) {
+                if (count[Integer.parseInt(str.substring(str.length() - 1))] == 0) {
+                    builder.append(Integer.parseInt(str.substring(str.length() - 1)));
+                    count[Integer.parseInt(str.substring(str.length() - 1))]++;
+                }
+                str = str.substring(0, str.length() - 1);
+            }
+            System.out.println(builder.toString());
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     /**
@@ -28,11 +76,10 @@ public class lastWordLength {
         try {
             BufferedReader in = new BufferedReader(new InputStreamReader(System.in));
             int i = Integer.parseInt(in.readLine());
-            Map<Integer, Integer> tm = new TreeMap<Integer, Integer>();
-
+            Map<Integer, Integer> tm = new TreeMap<>();
             for (int j = 0; j < i; j++) {
                 String s = in.readLine();
-                String[] str = s.split(" ");
+                String[] str = s.split("\\s+");
                 int key = Integer.parseInt(str[0]);
                 int value = tm.containsKey(key) ? Integer.parseInt(str[1]) + tm.get(key) : Integer.parseInt(str[1]);
                 tm.put(key, value);
