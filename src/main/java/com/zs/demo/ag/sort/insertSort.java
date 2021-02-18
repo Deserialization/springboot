@@ -1,19 +1,15 @@
 package com.zs.demo.ag.sort;
 
-public class selectSort {
+public class insertSort {
     public static void main(String[] args) {
-        int[] array = {3, 4, 1, 5, 2};
 
-        //剩余中找最小的
-        for (int i = 0; i < array.length; i++) {
-            //只为了找最小的
-            int minPos = i;
-            for (int j = i + 1; j < array.length; j++) {
-                if (array[j] < array[minPos]) {
-                    minPos = j;
+        int[] array = {3, 4, 1, 5, 2};
+        for (int i = 1; i < array.length; i++) {
+            for (int j = i; j > 0; j--) {
+                if (array[j] < array[j - 1]) {
+                    swap(array, j, j - 1);
                 }
             }
-            swap(array, i, minPos);
         }
         print(array);
     }

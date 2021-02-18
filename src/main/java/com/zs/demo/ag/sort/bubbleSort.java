@@ -1,21 +1,18 @@
 package com.zs.demo.ag.sort;
 
-public class selectSort {
+public class bubbleSort {
     public static void main(String[] args) {
         int[] array = {3, 4, 1, 5, 2};
 
-        //剩余中找最小的
-        for (int i = 0; i < array.length; i++) {
-            //只为了找最小的
-            int minPos = i;
-            for (int j = i + 1; j < array.length; j++) {
-                if (array[j] < array[minPos]) {
-                    minPos = j;
+        for (int i = array.length; i > 0; i--) {
+            for (int j = 0; j < i - 1; j++) {
+                if (array[j] > array[j + 1]) {
+                    swap(array, j, j + 1);
                 }
             }
-            swap(array, i, minPos);
         }
         print(array);
+
     }
 
     private static void swap(int[] array, int i, int minPos) {
