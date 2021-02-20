@@ -10,14 +10,19 @@ public class lastWordLength {
 
     public static void main(String[] args) throws Exception {
 
-        Scanner scanner = new Scanner(System.in);
-        while(scanner.hasNext()){
-            String string = scanner.nextLine();
-            for (int i = 0; i < 4; i++) {
-                System.out.println(getNumbers(string)[i]);
+        BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(System.in));
+        String input = "";
+        while ((input = bufferedReader.readLine()) != null) {
+            int count=0;
+            int num=Integer.parseInt(input);
+            for(int i=7;i<=num;i++){
+                if(i%7==0||contain7(i)){
+                    count++;
+                }
             }
+            System.out.println(count);
         }
-        scanner.close();
+        //countAction();
         //rabbit();
         //highMeter();
         //brotherWord();
@@ -40,6 +45,28 @@ public class lastWordLength {
         //transNum();
         //splitString();
         //lastWordLength();
+    }
+
+    public static boolean contain7(int n) {
+        while (n > 0) {
+            if (n % 10 == 7) {
+                return true;
+            } else {
+                n /= 10;
+            }
+        }
+        return false;
+    }
+
+    private static void countAction() {
+        Scanner scanner = new Scanner(System.in);
+        while(scanner.hasNext()){
+            String string = scanner.nextLine();
+            for (int i = 0; i < 4; i++) {
+                System.out.println(getNumbers(string)[i]);
+            }
+        }
+        scanner.close();
     }
 
     public static int[] getNumbers(String string) {
