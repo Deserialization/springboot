@@ -10,8 +10,8 @@ public class lastWordLength {
 
     public static void main(String[] args) throws Exception {
 
-        //sub();
         //judgeIp();
+        //sub();
         //togetherOne();
         //leftAndRight();
         //findBigChar();
