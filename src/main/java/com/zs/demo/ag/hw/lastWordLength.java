@@ -10,7 +10,14 @@ public class lastWordLength {
 
     public static void main(String[] args) throws Exception {
 
-        pot24();
+        //sub();
+        //judgeIp();
+        //togetherOne();
+        //leftAndRight();
+        //findBigChar();
+        //replaceProgram();
+        //day();
+        //pot24();
         //commad();
         //perGC();
         //binaryOne();
@@ -74,6 +81,279 @@ public class lastWordLength {
         //killChild();
 }
 
+    /**
+     * 输入一个字符串，返回其最长的数字子串，以及其长度。若有多个最长的数字子串，则将它们全部输出（按原字符串的相对位置）
+     本题含有多组样例输入
+     */
+    private static void sub() {
+        Scanner in = new Scanner(System.in);
+        while (in.hasNext()) {
+            String str = in.nextLine();
+            int len = str.length();
+            int max = 0;
+            int dp[] = new int[len];
+            int flag =0;
+            //动态规划边界
+            if (str.charAt(0)>='0'&&str.charAt(0)<='9') {
+
+                dp[0]=1;
+            }
+            for (int i = 1; i < len; i++) {
+                if (str.charAt(i)>='0'&&str.charAt(i)<='9') {
+                    dp[i]=dp[i-1]+1;
+                }else {
+                    dp[i]=0;
+                }
+            }
+            for (int i = 0; i < dp.length; i++) {
+                if (dp[i]>max) {
+                    max = dp[i];
+                    flag = i;
+                }
+            }
+            String temp = "";
+            for (int i = 0; i < dp.length; i++) {
+                if (dp[i]==max) {
+                    temp+=str.substring(i-max+1,i+1);
+                }
+            }
+            //System.out.println(str.substring(flag-max+1,flag+1)+","+max);
+            System.out.println(temp+","+max);
+        }
+    }
+
+
+    /**
+     * 请计算n*m的棋盘格子（n为横向的格子数，m为竖向的格子数）沿着各自边缘线从左上角走到右下角，总共有多少种走法，
+     * 要求不能走回头路，即：只能往右和往下走，不能往左和往上走。
+     * @param n
+     * @param m
+     * @return
+     */
+    public static int getCount(int n,int m) {
+        int[][] dp=new int[n+1][m+1];
+        for(int i=0;i<n+1;i++) {
+            for(int j=0;j<m+1;j++) {
+                if(i==0||j==0){
+                    // 边上的每一个点的可能性都是1，因为走到边上，就只能顺着边往下走了，可能性只能是1
+                    dp[i][j]=1;
+                }else{
+                    // 往后每一个点，都是后面两个点的可能性之和，因为它可以选择任意一个点来走，可能性就是下两个点的可能性相加
+                    dp[i][j]=dp[i][j-1]+dp[i-1][j];
+                }
+            }
+        }
+        // 最终加到最后一个点，可能性就是所有的路线数量
+        return dp[n][m];
+    }
+    private static void judgeIp() throws IOException {
+        BufferedReader bf = new BufferedReader(new InputStreamReader(System.in));
+        String str = "";
+        while((str = bf.readLine()) != null){
+
+            String[] subIP = str.split("\\.");
+
+            for(int i =0; i < subIP.length; i++){
+                Integer intIP = Integer.valueOf(subIP[i]);
+                if(intIP >= 0 && intIP<=255){
+                    if(i == subIP.length-1){
+                        System.out.println("YES");
+                    }
+                    continue;
+                } else{
+                    System.out.println("NO");
+                    break;
+                }
+            }
+        }
+    }
+
+    //
+//求一个byte数字对应的二进制数字中1的最大连续数，例如3的二进制为00000011，最大连续2个1
+    private static void togetherOne() throws IOException {
+        BufferedReader bf=new BufferedReader(new InputStreamReader(System.in));
+        String value;
+        while((value=bf.readLine())!=null){
+            int num=Integer.parseInt(value);
+            char[] chars=Integer.toBinaryString(num).toCharArray();
+
+            int[] nums=new int[chars.length];
+            for(int index=0;index<chars.length;index++){
+                char chat=chars[index];
+                if(chat=='1'){
+                    if(index==0)
+                        nums[index]=1;
+                    else{
+                        nums[index]=nums[index-1]+1;
+                        nums[index-1]=0;
+                    }
+                }
+            }
+
+            Arrays.sort(nums);
+            System.out.println(nums[nums.length-1]);
+        }
+    }
+
+    private static void leftAndRight() throws IOException {
+        BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+        String str = null;
+
+        while((str = br.readLine())!=null && str.length()!=0){
+            char[] chars = str.toCharArray();
+            int n = chars.length;
+            int max = 1;
+
+            for(int i = 0; i < n-1; i++){//奇
+                int left = i - 1;
+                int right = i + 1;
+                int length = 1;
+                while(left>=0 && right<n && chars[left]==chars[right]){
+                    length += 2;
+                    left--;
+                    right++;
+                }
+                max = max > length ? max : length;
+            }
+            for(int i = 0; i < n-1; i++){//偶
+                int length = 1;
+                if(chars[i]==chars[i+1]){
+                    length = 2;
+                }else
+                    continue;
+
+                int left = i - 1;
+                int right = i + 2;
+                while(left>=0 && right<n && chars[left]==chars[right]){
+                    length += 2;
+                    left--;
+                    right++;
+                }
+                max = max > length ? max : length;
+            }
+            System.out.println(max);
+        }
+    }
+
+    private static void findBigChar() throws IOException {
+        BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+        String str;
+        while((str = br.readLine()) != null) {
+            char[] chars = str.toCharArray();
+            int count = 0;
+            for(int i = 0; i < chars.length; i++)
+                if(65 <= chars[i] && chars[i] <= 90) count ++;
+            System.out.println(count);
+        }
+    }
+
+    /*验证尼科彻斯定理，即：任何一个整数m的立方都可以写成m个连续奇数之和。
+
+    例如：
+
+            1^3=1
+
+            2^3=3+5
+
+            3^3=7+9+11
+
+            4^3=13+15+17+1*/
+    public static String method(int m){
+        int temp1 = m*m*m ;
+        int temp2 = m*m ;
+        StringBuffer sb = new StringBuffer() ;
+
+        for(int i=0;i<m;i++){
+            if(m%2!=0){
+                sb.append(temp2-2*(m/2)+2*i).append("+") ;
+            }else{
+                sb.append(temp2-m+1+2*i).append("+") ; ;
+            }
+        }
+        return  sb.substring(0,sb.length()-1).toString() ;
+    }
+    /**
+     * 给定两个只包含小写字母的字符串，计算两个字符串的最大公共子串的长度。
+     注：子串的定义指一个字符串删掉其部分前缀和后缀（也可以不删）后形成的字符串。
+     * @param c1
+     * @param c2
+     * @return
+     */
+    public static int way(char[] c1, char[] c2) {
+        int max = 0;
+        for (int i = 0; i < c1.length; i++) {
+            for (int j = 0; j < c2.length; j++) {
+                int t1 = i;
+                int count = 0;
+                int t2 = j;
+                while (c1[t1] == c2[t2]) {
+                    count++;
+                    t1++;
+                    t2++;
+                    if (count > max) {
+                        max = count;
+                    }
+                    if (t1 == c1.length || t2 == c2.length) {
+                        break;
+                    }
+                }
+            }
+        }
+        return max;
+    }
+    private static void replaceProgram() throws IOException {
+        BufferedReader br=new BufferedReader(new InputStreamReader(System.in));
+        String s;
+        while((s=br.readLine())!=null){
+            char[] chars=s.toCharArray();
+            StringBuffer ana=new StringBuffer();
+            int flag=0;
+            int count=1;
+            for(int i=0;i<chars.length;i++){
+                if(chars[i]=='\"'){
+                    flag++;
+                    continue;
+                }
+                if(chars[i]!=' '){
+                    ana.append(chars[i]);
+                }
+                if(chars[i]==' '&&flag%2!=0){
+                    ana.append(chars[i]);
+                }
+                if(chars[i]==' '&&flag%2==0){
+                    ana.append("\n");
+                    count++;
+                }
+            }
+            System.out.println(count+"\n"+ana.toString());
+        }
+    }
+
+    private static void day() throws IOException {
+        BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+        String str = "";
+        while ((str = br.readLine()) != null) {
+            String[] strs = str.split(" ");
+            int year = Integer.parseInt(strs[0]);
+            int month = Integer.parseInt(strs[1]);
+            int day = Integer.parseInt(strs[2]);
+            int result = day;
+            for (int i = 1; i < month; i++) {
+                result += getMonthDays(year, i);
+            }
+            System.out.println(result);
+        }
+    }
+
+    public static int getMonthDays(int year, int month) {
+        if (month == 1 || month == 3 || month == 5 || month == 7 || month == 8 || month == 10 || month == 12) {
+            return 31;
+        }
+        if (month == 2) {
+            return year % 4 == 0 ? 29 : 28;
+        }
+        return 30;
+    }
     //买鸡
     private static void killChild() {
         int x,y;
