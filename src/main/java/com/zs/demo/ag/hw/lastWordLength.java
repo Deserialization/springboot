@@ -7,9 +7,44 @@ import java.util.*;
 
 public class lastWordLength {
 
+    private static int numSum(String str) {
+        if (str == null) {
+            return 0;
+        }
+
+        char[] charArray = str.toCharArray();
+        int res = 0;
+        int num = 0;
+        boolean posi = true;
+        int cur = 0;
+        for (int i = 0; i < charArray.length; i++) {
+            cur = charArray[i] - '0';
+            if (cur < 0 || cur > 9) {
+                res += num;
+                num = 0;
+                if (charArray[i] == '-') {
+                    if (i - 1 > -1 && charArray[i - 1] == '-') {
+                        posi = !posi;
+                    } else {
+                        posi = false;
+                    }
+                } else {
+                    posi = true;
+                }
+            } else {
+                num = num * 10 + (posi ? cur : -cur);
+            }
+        }
+
+        res += num;
+        return res;
+    }
+
+
 
     public static void main(String[] args) throws Exception {
 
+        System.out.println(numSum("A-1B--200"));
         //judgeIp();
         //sub();
         //togetherOne();
@@ -59,31 +94,31 @@ public class lastWordLength {
 
         //drink();
 
-    //deleteLettleChar();
-    //wads();
-    //countMemory();
-    //sortString();
-    //reverseSentence();
+        //deleteLettleChar();
+        //wads();
+        //countMemory();
+        //sortString();
+        //reverseSentence();
 
 
-    //convert();
-    //countWords();
+        //convert();
+        //countWords();
 
-    ///reverseSort();
-    //keyAndValue();
-    //addAndSub();
-    //divNumber();
-    //transNum();
-    //splitString();
-    //lastWordLength();
+        ///reverseSort();
+        //keyAndValue();
+        //addAndSub();
+        //divNumber();
+        //transNum();
+        //splitString();
+        //lastWordLength();
         //secretPalace();
 
         //killChild();
-}
+    }
 
     /**
      * 输入一个字符串，返回其最长的数字子串，以及其长度。若有多个最长的数字子串，则将它们全部输出（按原字符串的相对位置）
-     本题含有多组样例输入
+     * 本题含有多组样例输入
      */
     private static void sub() {
         Scanner in = new Scanner(System.in);
@@ -92,33 +127,33 @@ public class lastWordLength {
             int len = str.length();
             int max = 0;
             int dp[] = new int[len];
-            int flag =0;
+            int flag = 0;
             //动态规划边界
-            if (str.charAt(0)>='0'&&str.charAt(0)<='9') {
+            if (str.charAt(0) >= '0' && str.charAt(0) <= '9') {
 
-                dp[0]=1;
+                dp[0] = 1;
             }
             for (int i = 1; i < len; i++) {
-                if (str.charAt(i)>='0'&&str.charAt(i)<='9') {
-                    dp[i]=dp[i-1]+1;
-                }else {
-                    dp[i]=0;
+                if (str.charAt(i) >= '0' && str.charAt(i) <= '9') {
+                    dp[i] = dp[i - 1] + 1;
+                } else {
+                    dp[i] = 0;
                 }
             }
             for (int i = 0; i < dp.length; i++) {
-                if (dp[i]>max) {
+                if (dp[i] > max) {
                     max = dp[i];
                     flag = i;
                 }
             }
             String temp = "";
             for (int i = 0; i < dp.length; i++) {
-                if (dp[i]==max) {
-                    temp+=str.substring(i-max+1,i+1);
+                if (dp[i] == max) {
+                    temp += str.substring(i - max + 1, i + 1);
                 }
             }
             //System.out.println(str.substring(flag-max+1,flag+1)+","+max);
-            System.out.println(temp+","+max);
+            System.out.println(temp + "," + max);
         }
     }
 
@@ -126,41 +161,43 @@ public class lastWordLength {
     /**
      * 请计算n*m的棋盘格子（n为横向的格子数，m为竖向的格子数）沿着各自边缘线从左上角走到右下角，总共有多少种走法，
      * 要求不能走回头路，即：只能往右和往下走，不能往左和往上走。
+     *
      * @param n
      * @param m
      * @return
      */
-    public static int getCount(int n,int m) {
-        int[][] dp=new int[n+1][m+1];
-        for(int i=0;i<n+1;i++) {
-            for(int j=0;j<m+1;j++) {
-                if(i==0||j==0){
+    public static int getCount(int n, int m) {
+        int[][] dp = new int[n + 1][m + 1];
+        for (int i = 0; i < n + 1; i++) {
+            for (int j = 0; j < m + 1; j++) {
+                if (i == 0 || j == 0) {
                     // 边上的每一个点的可能性都是1，因为走到边上，就只能顺着边往下走了，可能性只能是1
-                    dp[i][j]=1;
-                }else{
+                    dp[i][j] = 1;
+                } else {
                     // 往后每一个点，都是后面两个点的可能性之和，因为它可以选择任意一个点来走，可能性就是下两个点的可能性相加
-                    dp[i][j]=dp[i][j-1]+dp[i-1][j];
+                    dp[i][j] = dp[i][j - 1] + dp[i - 1][j];
                 }
             }
         }
         // 最终加到最后一个点，可能性就是所有的路线数量
         return dp[n][m];
     }
+
     private static void judgeIp() throws IOException {
         BufferedReader bf = new BufferedReader(new InputStreamReader(System.in));
         String str = "";
-        while((str = bf.readLine()) != null){
+        while ((str = bf.readLine()) != null) {
 
             String[] subIP = str.split("\\.");
 
-            for(int i =0; i < subIP.length; i++){
+            for (int i = 0; i < subIP.length; i++) {
                 Integer intIP = Integer.valueOf(subIP[i]);
-                if(intIP >= 0 && intIP<=255){
-                    if(i == subIP.length-1){
+                if (intIP >= 0 && intIP <= 255) {
+                    if (i == subIP.length - 1) {
                         System.out.println("YES");
                     }
                     continue;
-                } else{
+                } else {
                     System.out.println("NO");
                     break;
                 }
@@ -171,27 +208,27 @@ public class lastWordLength {
     //
 //求一个byte数字对应的二进制数字中1的最大连续数，例如3的二进制为00000011，最大连续2个1
     private static void togetherOne() throws IOException {
-        BufferedReader bf=new BufferedReader(new InputStreamReader(System.in));
+        BufferedReader bf = new BufferedReader(new InputStreamReader(System.in));
         String value;
-        while((value=bf.readLine())!=null){
-            int num=Integer.parseInt(value);
-            char[] chars=Integer.toBinaryString(num).toCharArray();
+        while ((value = bf.readLine()) != null) {
+            int num = Integer.parseInt(value);
+            char[] chars = Integer.toBinaryString(num).toCharArray();
 
-            int[] nums=new int[chars.length];
-            for(int index=0;index<chars.length;index++){
-                char chat=chars[index];
-                if(chat=='1'){
-                    if(index==0)
-                        nums[index]=1;
-                    else{
-                        nums[index]=nums[index-1]+1;
-                        nums[index-1]=0;
+            int[] nums = new int[chars.length];
+            for (int index = 0; index < chars.length; index++) {
+                char chat = chars[index];
+                if (chat == '1') {
+                    if (index == 0)
+                        nums[index] = 1;
+                    else {
+                        nums[index] = nums[index - 1] + 1;
+                        nums[index - 1] = 0;
                     }
                 }
             }
 
             Arrays.sort(nums);
-            System.out.println(nums[nums.length-1]);
+            System.out.println(nums[nums.length - 1]);
         }
     }
 
@@ -199,32 +236,32 @@ public class lastWordLength {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
         String str = null;
 
-        while((str = br.readLine())!=null && str.length()!=0){
+        while ((str = br.readLine()) != null && str.length() != 0) {
             char[] chars = str.toCharArray();
             int n = chars.length;
             int max = 1;
 
-            for(int i = 0; i < n-1; i++){//奇
+            for (int i = 0; i < n - 1; i++) {//奇
                 int left = i - 1;
                 int right = i + 1;
                 int length = 1;
-                while(left>=0 && right<n && chars[left]==chars[right]){
+                while (left >= 0 && right < n && chars[left] == chars[right]) {
                     length += 2;
                     left--;
                     right++;
                 }
                 max = max > length ? max : length;
             }
-            for(int i = 0; i < n-1; i++){//偶
+            for (int i = 0; i < n - 1; i++) {//偶
                 int length = 1;
-                if(chars[i]==chars[i+1]){
+                if (chars[i] == chars[i + 1]) {
                     length = 2;
-                }else
+                } else
                     continue;
 
                 int left = i - 1;
                 int right = i + 2;
-                while(left>=0 && right<n && chars[left]==chars[right]){
+                while (left >= 0 && right < n && chars[left] == chars[right]) {
                     length += 2;
                     left--;
                     right++;
@@ -238,11 +275,11 @@ public class lastWordLength {
     private static void findBigChar() throws IOException {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
         String str;
-        while((str = br.readLine()) != null) {
+        while ((str = br.readLine()) != null) {
             char[] chars = str.toCharArray();
             int count = 0;
-            for(int i = 0; i < chars.length; i++)
-                if(65 <= chars[i] && chars[i] <= 90) count ++;
+            for (int i = 0; i < chars.length; i++)
+                if (65 <= chars[i] && chars[i] <= 90) count++;
             System.out.println(count);
         }
     }
@@ -258,23 +295,26 @@ public class lastWordLength {
             3^3=7+9+11
 
             4^3=13+15+17+1*/
-    public static String method(int m){
-        int temp1 = m*m*m ;
-        int temp2 = m*m ;
-        StringBuffer sb = new StringBuffer() ;
+    public static String method(int m) {
+        int temp1 = m * m * m;
+        int temp2 = m * m;
+        StringBuffer sb = new StringBuffer();
 
-        for(int i=0;i<m;i++){
-            if(m%2!=0){
-                sb.append(temp2-2*(m/2)+2*i).append("+") ;
-            }else{
-                sb.append(temp2-m+1+2*i).append("+") ; ;
+        for (int i = 0; i < m; i++) {
+            if (m % 2 != 0) {
+                sb.append(temp2 - 2 * (m / 2) + 2 * i).append("+");
+            } else {
+                sb.append(temp2 - m + 1 + 2 * i).append("+");
+                ;
             }
         }
-        return  sb.substring(0,sb.length()-1).toString() ;
+        return sb.substring(0, sb.length() - 1).toString();
     }
+
     /**
      * 给定两个只包含小写字母的字符串，计算两个字符串的最大公共子串的长度。
-     注：子串的定义指一个字符串删掉其部分前缀和后缀（也可以不删）后形成的字符串。
+     * 注：子串的定义指一个字符串删掉其部分前缀和后缀（也可以不删）后形成的字符串。
+     *
      * @param c1
      * @param c2
      * @return
@@ -301,31 +341,32 @@ public class lastWordLength {
         }
         return max;
     }
+
     private static void replaceProgram() throws IOException {
-        BufferedReader br=new BufferedReader(new InputStreamReader(System.in));
+        BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
         String s;
-        while((s=br.readLine())!=null){
-            char[] chars=s.toCharArray();
-            StringBuffer ana=new StringBuffer();
-            int flag=0;
-            int count=1;
-            for(int i=0;i<chars.length;i++){
-                if(chars[i]=='\"'){
+        while ((s = br.readLine()) != null) {
+            char[] chars = s.toCharArray();
+            StringBuffer ana = new StringBuffer();
+            int flag = 0;
+            int count = 1;
+            for (int i = 0; i < chars.length; i++) {
+                if (chars[i] == '\"') {
                     flag++;
                     continue;
                 }
-                if(chars[i]!=' '){
+                if (chars[i] != ' ') {
                     ana.append(chars[i]);
                 }
-                if(chars[i]==' '&&flag%2!=0){
+                if (chars[i] == ' ' && flag % 2 != 0) {
                     ana.append(chars[i]);
                 }
-                if(chars[i]==' '&&flag%2==0){
+                if (chars[i] == ' ' && flag % 2 == 0) {
                     ana.append("\n");
                     count++;
                 }
             }
-            System.out.println(count+"\n"+ana.toString());
+            System.out.println(count + "\n" + ana.toString());
         }
     }
 
@@ -354,15 +395,16 @@ public class lastWordLength {
         }
         return 30;
     }
+
     //买鸡
     private static void killChild() {
-        int x,y;
-        for(int z=0;z<100;z++){
-            if(z%3==0){
-                if(4*z/3-100>=0 && 200-7*z/3<=100 && 4*z/3-100<=100 && 200-7*z/3>=0){
-                    x = 4*z/3-100;
-                    y = 200-7*z/3;
-                    System.out.println(x+" "+y+" "+z);
+        int x, y;
+        for (int z = 0; z < 100; z++) {
+            if (z % 3 == 0) {
+                if (4 * z / 3 - 100 >= 0 && 200 - 7 * z / 3 <= 100 && 4 * z / 3 - 100 <= 100 && 200 - 7 * z / 3 >= 0) {
+                    x = 4 * z / 3 - 100;
+                    y = 200 - 7 * z / 3;
+                    System.out.println(x + " " + y + " " + z);
                 }
             }
         }
@@ -422,10 +464,11 @@ public class lastWordLength {
 
     /**
      * 多行字符串，每行字符串一条命令
+     *
      * @throws IOException
      */
     private static void commad() throws IOException {
-        BufferedReader br=new BufferedReader(new InputStreamReader(System.in));
+        BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
 
         HashMap<String, String> HMp = new HashMap<>();
         HMp.put("reset", "reset what");
@@ -435,27 +478,26 @@ public class lastWordLength {
         HMp.put("reboot backplane", "impossible");
         HMp.put("backplane abort", "install first");
 
-        String input=br.readLine();
+        String input = br.readLine();
 
-        while(null!=input){
-            if(HMp.containsKey(input)){
+        while (null != input) {
+            if (HMp.containsKey(input)) {
                 System.out.println(HMp.get(input));
-            }
-            else{
+            } else {
                 System.out.println("unknown command");
             }
 
-            input=br.readLine();
+            input = br.readLine();
         }
     }
 
     //找出GC比例最高的子串,如果有多个输出第一个的子串
 
     /**
-     *
      * 输入 AACTGTGCACGACCTGA
-            5
-       输出 GCACG
+     * 5
+     * 输出 GCACG
+     *
      * @throws IOException
      */
     private static void perGC() throws IOException {
@@ -464,32 +506,31 @@ public class lastWordLength {
 
         String str = null;
 
-        while((str = bf.readLine())!=null){
+        while ((str = bf.readLine()) != null) {
 
             int num = Integer.parseInt(bf.readLine());
             int count = 0;
-            for(int i = 0;i<str.length();i++){
+            for (int i = 0; i < str.length(); i++) {
                 char c = str.charAt(i);
-                if(c=='G'||c=='C')
+                if (c == 'G' || c == 'C')
                     count++;
             }
             int max = count;
             int left = 0;
-            for(int i = 1;i<str.length()-num;i++){
-                char pre = str.charAt(i-1);
-                char nex = str.charAt(i+num-1);
-                if(pre=='G'||pre=='C')
+            for (int i = 1; i < str.length() - num; i++) {
+                char pre = str.charAt(i - 1);
+                char nex = str.charAt(i + num - 1);
+                if (pre == 'G' || pre == 'C')
                     count--;
-                if(nex=='G'||nex=='C')
+                if (nex == 'G' || nex == 'C')
                     count++;
-                if(count>max){
+                if (count > max) {
                     max = count;
                     left = i;
                 }
             }
 
-            System.out.println(str.substring(left,left+num));
-
+            System.out.println(str.substring(left, left + num));
 
 
         }
@@ -498,13 +539,13 @@ public class lastWordLength {
     //计算整数二进制中1的个数
     private static void binaryOne() {
         Scanner scan = new Scanner(System.in);
-        while(scan.hasNext()){
+        while (scan.hasNext()) {
             int n = scan.nextInt();
             int count = 0;
             String str = Integer.toBinaryString(n);
             char[] cha = str.toCharArray();
-            for(char c :cha){
-                if(c=='1'){
+            for (char c : cha) {
+                if (c == '1') {
                     count++;
                 }
             }
@@ -514,18 +555,18 @@ public class lastWordLength {
 
     //输入n个整数，输出其中最小的k个。
     private static void leastTwo() {
-        Scanner scanner=new Scanner(System.in);
+        Scanner scanner = new Scanner(System.in);
         while (scanner.hasNext()) {
-            String s=scanner.nextLine();
-            String s1=scanner.nextLine();
-            String[] ss=s.split(" ");
-            String[] s1s=s1.split(" ");
-            int[] nums=new int[Integer.valueOf(ss[0])];
+            String s = scanner.nextLine();
+            String s1 = scanner.nextLine();
+            String[] ss = s.split(" ");
+            String[] s1s = s1.split(" ");
+            int[] nums = new int[Integer.valueOf(ss[0])];
             for (int i = 0; i < s1s.length; i++) {
-                nums[i]=Integer.valueOf(s1s[i]);
+                nums[i] = Integer.valueOf(s1s[i]);
             }
             Arrays.sort(nums);
-            StringBuilder stringBuilder=new StringBuilder();
+            StringBuilder stringBuilder = new StringBuilder();
             for (int i = 0; i < Integer.valueOf(ss[1]); i++) {
                 stringBuilder.append(nums[i]).append(" ");
             }
@@ -537,26 +578,26 @@ public class lastWordLength {
     private static void nextInsert() throws IOException {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
         String str = null;
-        while((str = br.readLine())!=null){
+        while ((str = br.readLine()) != null) {
             int num = Integer.parseInt(str);
             String[] numStr = br.readLine().split(" ");
 
             int num2 = Integer.parseInt(br.readLine().trim());
-            if(num2<=0||num2>numStr.length){
+            if (num2 <= 0 || num2 > numStr.length) {
                 System.out.println(num2);
-            }else{
-                System.out.println(numStr[numStr.length-num2]);
+            } else {
+                System.out.println(numStr[numStr.length - num2]);
             }
         }
     }
 
     //输入一个字符串和一个整数k，截取字符串的前k个字符并输出
     private static void substringSix() throws IOException {
-        BufferedReader br=new BufferedReader(new InputStreamReader(System.in));
-        String str=null;
-        while((str=br.readLine())!=null){
-            int k=Integer.parseInt(br.readLine());
-            System.out.println(str.substring(0,k));
+        BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+        String str = null;
+        while ((str = br.readLine()) != null) {
+            int k = Integer.parseInt(br.readLine());
+            System.out.println(str.substring(0, k));
         }
     }
 
@@ -565,22 +606,22 @@ public class lastWordLength {
         String str;
         while ((str = br.readLine()) != null) {
             int n = Integer.parseInt(str);
-            for(int i=0;i<n;i++){
-                String s=br.readLine();
-                char[] c=s.toCharArray();
-                int[] count=new int[150];
-                for(int j=0;j<c.length;j++){
+            for (int i = 0; i < n; i++) {
+                String s = br.readLine();
+                char[] c = s.toCharArray();
+                int[] count = new int[150];
+                for (int j = 0; j < c.length; j++) {
                     count[c[j]]++;
                 }
 
                 Arrays.sort(count);
-                int a=26;
-                int sum=0;
-                for(int k=count.length-1;k>=0;k--){
+                int a = 26;
+                int sum = 0;
+                for (int k = count.length - 1; k >= 0; k--) {
                     if (count[k] == 0) {
                         break;
                     }
-                    sum+=count[k]*(a--);
+                    sum += count[k] * (a--);
                 }
                 System.out.println(sum);
             }
@@ -589,40 +630,40 @@ public class lastWordLength {
 
     //迷宫问题
     private static void secretPalace() throws IOException {
-        BufferedReader bfr  = new BufferedReader(new InputStreamReader(System.in));
+        BufferedReader bfr = new BufferedReader(new InputStreamReader(System.in));
         String x;
-        while ((x=bfr.readLine())!=null){
+        while ((x = bfr.readLine()) != null) {
             String[] arr = x.split(" ");
             int m = Integer.parseInt(arr[0]);
             int n = Integer.parseInt(arr[1]);
             int[][] a = new int[m][n];
-            for(int i=0;i<m;i++){
+            for (int i = 0; i < m; i++) {
                 String strr = bfr.readLine();
                 String[] b = strr.split(" ");
-                for(int j=0;j<n;j++){
+                for (int j = 0; j < n; j++) {
                     a[i][j] = Integer.parseInt(b[j]);
                 }
             }
 
-            int i=0;
-            int j=0;
-            for(int k=0;k<m+n-1;k++){
+            int i = 0;
+            int j = 0;
+            for (int k = 0; k < m + n - 1; k++) {
                 ////打印：当mat[i][j]==0时
-                if(a[i][j]==0){
-                    System.out.println("(" +i+","+ j+")");
+                if (a[i][j] == 0) {
+                    System.out.println("(" + i + "," + j + ")");
                 }
                 //只能往下走：索引到最大j==n-1||右边mat[i][j+1]==1时，i++
-                if (j==n-1||a[i][j+1]==1){
+                if (j == n - 1 || a[i][j + 1] == 1) {
                     i++;
                     continue;
                 }
                 //只能往右走：索引到最大i==m-1||下边mat[i][j+1]==1时，j++
-                if(i==m-1||a[i][j+1]==0){
+                if (i == m - 1 || a[i][j + 1] == 0) {
                     j++;
                     continue;
                 }
                 //停止：i==m-1 && j==n-1时，break跳出
-                if((i==m-1)&&(j==n-1)){
+                if ((i == m - 1) && (j == n - 1)) {
                     break;
                 }
             }
@@ -633,73 +674,73 @@ public class lastWordLength {
 
 
     //数字转换成英语
-    public static String parse(int num){
-        String[] numStr={"zero","one","two","three","four","five",
-                "six","seven","eight","nine","ten","eleven","twelve",
-                "thirteen","fourteen","fifteen","sixteen","seventeen",
-                "eighteen","ninteen"};
-        if(num>=0 && num<20){
+    public static String parse(int num) {
+        String[] numStr = {"zero", "one", "two", "three", "four", "five",
+                "six", "seven", "eight", "nine", "ten", "eleven", "twelve",
+                "thirteen", "fourteen", "fifteen", "sixteen", "seventeen",
+                "eighteen", "ninteen"};
+        if (num >= 0 && num < 20) {
             return numStr[num];
-        }else if(num>=20 && num<100){
-            int a=num%10;
-            if(num<30){
-                return a !=0?"twenty "+parse(a):"twenty";
-            }else if(num<40){
-                return a !=0?"thirty "+parse(a):"thirty";
-            }else if(num<50){
-                return a !=0?"forty "+parse(a):"forty";
-            }else if(num<60){
-                return a !=0?"fifty "+parse(a):"fifty";
-            }else if(num<70){
-                return a !=0?"sixty "+parse(a):"sixty";
-            }else if(num<80){
-                return a !=0?"seventy "+parse(a):"seventy";
-            }else if(num<90){
-                return a !=0?"eighty "+parse(a):"eighty";
-            }else if(num<100){
-                return a !=0?"ninety "+parse(a):"ninety";
+        } else if (num >= 20 && num < 100) {
+            int a = num % 10;
+            if (num < 30) {
+                return a != 0 ? "twenty " + parse(a) : "twenty";
+            } else if (num < 40) {
+                return a != 0 ? "thirty " + parse(a) : "thirty";
+            } else if (num < 50) {
+                return a != 0 ? "forty " + parse(a) : "forty";
+            } else if (num < 60) {
+                return a != 0 ? "fifty " + parse(a) : "fifty";
+            } else if (num < 70) {
+                return a != 0 ? "sixty " + parse(a) : "sixty";
+            } else if (num < 80) {
+                return a != 0 ? "seventy " + parse(a) : "seventy";
+            } else if (num < 90) {
+                return a != 0 ? "eighty " + parse(a) : "eighty";
+            } else if (num < 100) {
+                return a != 0 ? "ninety " + parse(a) : "ninety";
             }
-        }else if(num>=100 && num<1000){
-            int x=num/100;
-            int y=num%100;
-            if(y!=0){
-                return parse(x)+" hundred"+ " and "+ parse(y);
-            }else{
-                return parse(x)+" hundred";
+        } else if (num >= 100 && num < 1000) {
+            int x = num / 100;
+            int y = num % 100;
+            if (y != 0) {
+                return parse(x) + " hundred" + " and " + parse(y);
+            } else {
+                return parse(x) + " hundred";
             }
-        }
-        else if(num>=1000 && num<1000000){
-            int x=num/1000;
-            int y=num%1000;
-            if(y!=0){
-                return parse(x)+" thousand "+ parse(y);
-            }else{
-                return parse(x)+" thousand";
+        } else if (num >= 1000 && num < 1000000) {
+            int x = num / 1000;
+            int y = num % 1000;
+            if (y != 0) {
+                return parse(x) + " thousand " + parse(y);
+            } else {
+                return parse(x) + " thousand";
             }
-        }else if(num>=1000000 && num<100000000){
-            int x=num/1000000;
-            int y=num%1000000;
-            if(y!=0){
-                return parse(x)+" million "+ parse(y);
-            }else{
-                return parse(x)+" million";
+        } else if (num >= 1000000 && num < 100000000) {
+            int x = num / 1000000;
+            int y = num % 1000000;
+            if (y != 0) {
+                return parse(x) + " million " + parse(y);
+            } else {
+                return parse(x) + " million";
             }
         }
         return "error";
     }
+
     //不死兔子
     private static void notDeadRabbit() throws IOException {
         BufferedReader bf = new BufferedReader(new InputStreamReader(System.in));
         String input;
-        while((input = bf.readLine())!=null){
+        while ((input = bf.readLine()) != null) {
             int num = Integer.parseInt(input);
-            int a=1;
-            int b=1;
-            if(num==1 || num==2) System.out.println(num);
-            else{
-                for(int i=3;i<=num;i++){
+            int a = 1;
+            int b = 1;
+            if (num == 1 || num == 2) System.out.println(num);
+            else {
+                for (int i = 3; i <= num; i++) {
                     int temp = b;
-                    b = a+b;
+                    b = a + b;
                     a = temp;
                 }
                 System.out.println(b);
@@ -714,17 +755,17 @@ public class lastWordLength {
         arr[0][0] = 1;
         System.out.print(arr[0][0]);
         for (int i = 1; i < key; i++) {
-            arr[0][i] = arr[0][i-1] + i+1;
-            System.out.print(" "+arr[0][i]);
+            arr[0][i] = arr[0][i - 1] + i + 1;
+            System.out.print(" " + arr[0][i]);
         }
         for (int i = 1; i < key; i++) {
             System.out.println();
-            for (int j = 0; j < key-i; j++) {
-                arr[i][j] = arr[i-1][j+1] -1;
-                if(j==0){
+            for (int j = 0; j < key - i; j++) {
+                arr[i][j] = arr[i - 1][j + 1] - 1;
+                if (j == 0) {
                     System.out.print(arr[i][j]);
-                }else {
-                    System.out.print(" "+arr[i][j]);
+                } else {
+                    System.out.print(" " + arr[i][j]);
                 }
             }
         }
@@ -732,17 +773,16 @@ public class lastWordLength {
 
     private static void asicSort() {
         Scanner in = new Scanner(System.in);
-        while(in.hasNext()){
+        while (in.hasNext()) {
             String s = in.nextLine();
-            char [] str = s.toCharArray();
+            char[] str = s.toCharArray();
             Arrays.sort(str);
             System.out.println(str);
         }
     }
 
-    private static void getTenToIP(String num)
-    {
-        String sb="";
+    private static void getTenToIP(String num) {
+        String sb = "";
         //把数转化成二进制
         String binaryString = Long.toBinaryString(Long.parseLong(num));
         /*System.out.println(binaryString);
@@ -751,46 +791,41 @@ public class lastWordLength {
         System.out.println(addZero32(binaryString).length());*/
         String binnaryNum = addZero32(binaryString);
         //然后没8个一组，进行截取
-        for(int i=0;i<binnaryNum.length();i=i+8)
-        {
+        for (int i = 0; i < binnaryNum.length(); i = i + 8) {
             //System.out.println(binnaryNum.substring(i, i+8));
-            String substring = binnaryNum.substring(i, i+8);
+            String substring = binnaryNum.substring(i, i + 8);
             //转化为十进制数
-            int parseInt = Integer.parseInt(substring,2);
-            sb=sb+parseInt+".";
+            int parseInt = Integer.parseInt(substring, 2);
+            sb = sb + parseInt + ".";
 
         }
-        System.out.println(sb.substring(0, sb.length()-1));
+        System.out.println(sb.substring(0, sb.length() - 1));
     }
 
     private static String addZero32(String binaryString) {
         // TODO Auto-generated method stub
 
-        if(binaryString.length()<32)
-        {
+        if (binaryString.length() < 32) {
             String sb = "";
-            int addLength = 32-binaryString.length();
-            for(int i=0;i<addLength;i++)
-            {
-                sb= sb+"0";
+            int addLength = 32 - binaryString.length();
+            for (int i = 0; i < addLength; i++) {
+                sb = sb + "0";
             }
             return sb + binaryString;
         }
         return binaryString;
     }
 
-    private static void getTenIp(String ip)
-    {
+    private static void getTenIp(String ip) {
         String sb = "";
         String[] sub = ip.split("\\.");//.需要转义字符
-        for(int i=0;i<sub.length;i++)
-        {
+        for (int i = 0; i < sub.length; i++) {
             //System.out.println(sub[i]);
             //对每一个字符转换成二进制
             String binaryString = Integer.toBinaryString(Integer.parseInt(sub[i]));
             //对每一位进行判断，不够8位补零
             String addZeroIP = addZero(binaryString);
-            sb=sb+addZeroIP;
+            sb = sb + addZeroIP;
             //System.out.println(addZero(binaryString));
         }
         //System.out.println(sb.length());
@@ -800,64 +835,64 @@ public class lastWordLength {
     private static String addZero(String binaryString) {
         // TODO Auto-generated method stub
 
-        if(binaryString.length()<8)
-        {
+        if (binaryString.length() < 8) {
             String sb = "";
-            int addLength = 8-binaryString.length();
-            for(int i=0;i<addLength;i++)
-            {
-                sb= sb+"0";
+            int addLength = 8 - binaryString.length();
+            for (int i = 0; i < addLength; i++) {
+                sb = sb + "0";
             }
             return sb + binaryString;
         }
         return binaryString;
     }
+
     //回文串只有两种类型：偶数型为ABBA型，奇数型为ABA型。。
     //依次向后以每个字符为中心，向两侧扩展，判断是偶数型还是奇数型，然后比较偶数型和奇数型回文串的最大长度。。
-    public static void Dispose(String str){
+    public static void Dispose(String str) {
         int len = str.length();//字符串长度
-        if(len == 1){
+        if (len == 1) {
             System.out.println(1);
             return;
         }
         int num = 1;//回文串最大长度,最小为1
-        for(int i=1;i<len-1;i++){  //从第二个字符开始，依次选为中心字符向向两侧扩展
-            if(str.charAt(i)==str.charAt(i+1)){  //偶数对为回文串
+        for (int i = 1; i < len - 1; i++) {  //从第二个字符开始，依次选为中心字符向向两侧扩展
+            if (str.charAt(i) == str.charAt(i + 1)) {  //偶数对为回文串
                 int cur = 0;  //当成为回文串的最大长度,初始化置为0
                 int start = i; //左侧起始位
-                int end = i+1; //右侧起始位
-                while(start >=0 && end <len && str.charAt(start) == str.charAt(end)){ //向两侧扩展
-                    start --;//每次扩展一位
-                    end ++;
+                int end = i + 1; //右侧起始位
+                while (start >= 0 && end < len && str.charAt(start) == str.charAt(end)) { //向两侧扩展
+                    start--;//每次扩展一位
+                    end++;
                     cur += 2;//每次最大回文长度增加两位
                 }
-                if(cur>=num){
+                if (cur >= num) {
                     num = cur;
                 }
             }
-            if(str.charAt(i-1) == str.charAt(i+1)){ //奇数对为回文串
+            if (str.charAt(i - 1) == str.charAt(i + 1)) { //奇数对为回文串
                 int cur = 0;
-                int start = i-1; //左侧
-                int end = i+1; //右侧
-                while(start>=0 && end <len && str.charAt(start) == str.charAt(end)){ //向两侧扩展
-                    start --;
-                    end ++;
+                int start = i - 1; //左侧
+                int end = i + 1; //右侧
+                while (start >= 0 && end < len && str.charAt(start) == str.charAt(end)) { //向两侧扩展
+                    start--;
+                    end++;
                     cur += 2;
                 }
-                if(cur>=num){
-                    num = cur+1;//注意此处加1是为了算上中心字符；
+                if (cur >= num) {
+                    num = cur + 1;//注意此处加1是为了算上中心字符；
                 }
             }
         }
         System.out.println(num);
     }
+
     private static void prefectReverse() {
         Scanner sc = new Scanner(System.in);
         String s = sc.nextLine();
         String ss = s.replaceAll("[^a-zA-Z]+", " ").trim();
-        String str[]=ss.split(" ");
-        for(int i=str.length-1;i>0;i--){
-            System.out.print(str[i]+" ");
+        String str[] = ss.split(" ");
+        for (int i = str.length - 1; i > 0; i--) {
+            System.out.print(str[i] + " ");
         }
         System.out.println(str[0]);
     }
