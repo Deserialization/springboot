@@ -67,7 +67,6 @@ public class findWordCount {
                 start = -1;
 
             }
-
             if (count == k) {
                 while (count-- != 0) {
                     chas[start++] = 0;
