@@ -24,11 +24,14 @@ public class findWordCount {
         System.out.println(times);
     }*/
     public static void main(String[] args) {
-        Scanner scanner = new Scanner(System.in);
+        String a = "A000B0000";
+
+        System.out.println(removeZeros(a, 4));
+        /*Scanner scanner = new Scanner(System.in);
         String str = scanner.nextLine().toUpperCase();
         char target = scanner.nextLine().toUpperCase().toCharArray()[0];
         int n = getCount(str, target);
-        System.out.println(n);
+        System.out.println(n);*/
     }
 
     private static int getCount(String str, char target) {
@@ -48,4 +51,30 @@ public class findWordCount {
     }
 
 
+    private static String removeZeros(String str, int k) {
+        if (str == null || k < 1) {
+            return str;
+        }
+        char[] chas = str.toCharArray();
+        int count = 0;
+        int start = -1;
+        for (int i = 0; i < chas.length; i++) {
+            if (chas[i] == '0') {
+                count++;
+                start = start == -1 ? i : start;
+            } else {
+                count = 0;
+                start = -1;
+
+            }
+
+            if (count == k) {
+                while (count-- != 0) {
+                    chas[start++] = 0;
+                }
+            }
+
+        }
+        return String.valueOf(chas);
+    }
 }
